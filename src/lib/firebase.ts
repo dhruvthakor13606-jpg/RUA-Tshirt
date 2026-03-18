@@ -20,15 +20,18 @@ if (!import.meta.env.VITE_FIREBASE_API_KEY) {
 
 let app;
 try {
-  app = initializeApp(firebaseConfig);
+  if (import.meta.env.VITE_FIREBASE_API_KEY) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    console.warn("⚠️ Firebase API Key missing. Skipping initialization.");
+  }
 } catch (error) {
   console.error("❌ Firebase initialization failed:", error);
-  // Provide a minimal fallback mock if needed, or just let app be undefined
-  app = {} as any; 
 }
 
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-export const storage = getStorage(app);
+// Safely initialize services only if app exists
+export const db = app ? getFirestore(app) : null as any;
+export const auth = app ? getAuth(app) : null as any;
+export const storage = app ? getStorage(app) : null as any;
 
 export default app;
