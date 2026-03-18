@@ -42,4 +42,7 @@ export const auth = (app && app.options) ? getAuth(app) : ({
 
 export const storage = (app && app.options) ? getStorage(app) : ({} as any);
 
+// Export a flag to help pages instantly skip DB calls if not configured
+export const isMock = !app;
+
 export default app;

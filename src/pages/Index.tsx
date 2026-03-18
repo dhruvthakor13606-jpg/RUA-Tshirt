@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ProductCard from "@/components/shop/ProductCard";
 import { Product } from "@/data/products";
-import { db } from "@/lib/firebase";
+import { db, isMock } from "@/lib/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { products as localProducts } from "@/data/products";
 import { toast } from "sonner";
 
 const Index = () => {
@@ -17,6 +18,12 @@ const Index = () => {
   useEffect(() => {
     const fetchTrending = async () => {
       setLoading(true);
+      if (isMock) {
+        setTrending(localProducts.filter(p => p.isTrending));
+        setLoading(false);
+        return;
+      }
+
       try {
         const q = query(collection(db, "products"), where("isTrending", "==", true));
         const querySnapshot = await getDocs(q);

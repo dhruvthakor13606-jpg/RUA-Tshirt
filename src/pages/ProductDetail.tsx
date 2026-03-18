@@ -5,8 +5,9 @@ import { useCart } from "@/context/CartContext";
 import { Product } from "@/data/products";
 import { Review } from "@/types/ecommerce";
 import { useState, useEffect } from "react";
-import { auth, db } from "@/lib/firebase";
+import { auth, db, isMock } from "@/lib/firebase";
 import { doc, getDoc, collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { products as localProducts } from "@/data/products";
 import { onAuthStateChanged } from "firebase/auth";
 import { toast } from "sonner";
 import { Star } from "lucide-react";
@@ -36,6 +37,13 @@ const ProductDetail = () => {
     const fetchProductAndReviews = async () => {
       if (!id) return;
       setLoading(true);
+      if (isMock) {
+        const found = localProducts.find(p => p.id === Number(id));
+        if (found) setProduct(found);
+        setLoading(false);
+        return;
+      }
+
       try {
         // Fetch Product
         const docRef = doc(db, "products", id);

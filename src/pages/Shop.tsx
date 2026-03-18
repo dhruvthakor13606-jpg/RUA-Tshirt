@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/shop/ProductCard";
 import ProductSkeleton from "@/components/shop/ProductSkeleton";
 import { categories, Product } from "@/data/products";
-import { db } from "@/lib/firebase";
+import { db, isMock } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { products as localProducts, categories as localCategories } from "@/data/products";
 import { seedProducts } from "@/lib/seedProducts";
 import { toast } from "sonner";
 
@@ -27,6 +28,13 @@ const Shop = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      if (isMock) {
+        setProducts(localProducts);
+        setDbCategories(Array.from(new Set(["All", ...localCategories])));
+        setLoading(false);
+        return;
+      }
+
       try {
         // Fetch Products
         const productsSnapshot = await getDocs(collection(db, "products"));
