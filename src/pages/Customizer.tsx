@@ -14,6 +14,8 @@ import {
   Sparkles,
   Download
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
 
 const fonts = [
@@ -45,7 +47,24 @@ const Customizer = () => {
   const [logoSize, setLogoSize] = useState(80);
   const [logoY, setLogoY] = useState(30);
   
+  const { addItem } = useCart();
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePlaceOrder = () => {
+    const customProduct = {
+      id: Date.now(), // Unique ID for this custom design
+      name: `Custom RUA Tee - ${teeColors.find(c => c.value === teeColor)?.name || "Original"}`,
+      price: 29.99,
+      image: "/images/blank-tee.png",
+      category: "Custom",
+      description: `Custom design: "${text}" with custom logo and ${teeColors.find(c => c.value === teeColor)?.name} finish.`,
+    };
+
+    addItem(customProduct, "M"); // Default size M for custom orders
+    toast.success("Added your custom design to the cart!");
+    navigate("/cart");
+  };
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -295,7 +314,11 @@ const Customizer = () => {
               <div className="absolute top-0 right-0 h-32 w-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-white/20 transition-all" />
               <h4 className="text-xl font-bold tracking-tight mb-1 relative z-10">Done Building?</h4>
               <p className="text-xs text-primary-foreground/80 mb-6 relative z-10">Ready to make this design a reality? Complete your custom order now.</p>
-              <Button variant="secondary" className="w-full rounded-xl font-bold py-6 relative z-10">
+              <Button 
+                variant="secondary" 
+                className="w-full rounded-xl font-bold py-6 relative z-10"
+                onClick={handlePlaceOrder}
+              >
                 Place Custom Order
               </Button>
             </div>
