@@ -27,13 +27,13 @@ const fonts = [
 ];
 
 const teeColors = [
-  { name: "Pure White", value: "#ffffff" },
-  { name: "Midnight", value: "#1a1a1a" },
-  { name: "Concrete", value: "#8c8c8c" },
-  { name: "Navy Blue", value: "#1e293b" },
-  { name: "Forest", value: "#14532d" },
-  { name: "Sand", value: "#d6d3d1" },
-  { name: "Crimson", value: "#991b1b" },
+  { name: "Pure White", value: "#ffffff", image: "/images/white-tee.png" },
+  { name: "Midnight", value: "#1a1a1a", image: "/images/blank-tee.png" }, // Using original for black
+  { name: "Concrete", value: "#8c8c8c", image: "/images/white-tee.png" }, 
+  { name: "Navy Blue", value: "#1e293b", image: "/images/blue-tee.png" },
+  { name: "Forest", value: "#14532d", image: "/images/white-tee.png" }, // Overlay on white-tee
+  { name: "Sand", value: "#d6d3d1", image: "/images/white-tee.png" },
+  { name: "Crimson", value: "#991b1b", image: "/images/red-tee.png" },
 ];
 
 const Customizer = () => {
@@ -59,7 +59,9 @@ const Customizer = () => {
       image: "/images/blank-tee.png",
       category: "Custom",
       description: `Custom design: "${text}" with custom logo and ${teeColors.find(c => c.value === teeColor)?.name} finish.`,
-    };
+      color: teeColor,
+      isTrending: false
+    } as any;
 
     addItem(customProduct, "M"); // Default size M for custom orders
     toast.success("Added your custom design to the cart!");
@@ -108,11 +110,15 @@ const Customizer = () => {
                 style={{ backgroundColor: teeColor }}
               />
 
-              {/* The Mockup Base (Multiply blend to show shadows on color) */}
+              {/* The Mockup Base (Dynamic image swap for real-life colors) */}
               <img 
-                src="/images/blank-tee.png" 
+                src={teeColors.find(c => c.value === teeColor)?.image || "/images/blank-tee.png"} 
                 alt="Mockup Base" 
-                className="relative h-full w-full object-contain mix-blend-multiply opacity-100 pointer-events-none drop-shadow-2xl"
+                className={`relative h-full w-full object-contain pointer-events-none drop-shadow-2xl transition-opacity duration-500`}
+                style={{ 
+                  mixBlendMode: teeColor === '#ffffff' ? 'normal' : 'multiply',
+                  opacity: 1 
+                }}
               />
 
               {/* Custom Layers Container */}
