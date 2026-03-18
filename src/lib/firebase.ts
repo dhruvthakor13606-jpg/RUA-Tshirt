@@ -13,7 +13,19 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-const app = initializeApp(firebaseConfig);
+// Log warning if config is missing
+if (!import.meta.env.VITE_FIREBASE_API_KEY) {
+  console.warn("⚠️ Firebase API Key is missing. Check your Vercel Environment Variables!");
+}
+
+let app;
+try {
+  app = initializeApp(firebaseConfig);
+} catch (error) {
+  console.error("❌ Firebase initialization failed:", error);
+  // Provide a minimal fallback mock if needed, or just let app be undefined
+  app = {} as any; 
+}
 
 export const db = getFirestore(app);
 export const auth = getAuth(app);
