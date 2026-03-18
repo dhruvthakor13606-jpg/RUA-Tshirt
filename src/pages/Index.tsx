@@ -98,26 +98,28 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="relative reveal stagger-2" ref={addToReveals}>
-            <div className="absolute -top-20 -right-20 h-96 w-96 bg-primary/10 rounded-full blur-[100px] animate-pulse" />
-            <div className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl animate-float">
+          <div className="relative reveal stagger-2 flex items-center justify-center p-4 lg:p-0" ref={addToReveals}>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-full bg-primary/5 rounded-full blur-[120px] animate-pulse" />
+            <div className="relative w-full max-w-[600px] aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl animate-float border border-white/5 bg-background/20 backdrop-blur-sm">
               <img 
                 src="/images/hero.png" 
                 alt="RUA Premium Tee" 
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain object-center scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
             </div>
             
-            {/* Floating Glass Tag */}
-            <div className="absolute bottom-10 -left-10 glass p-6 rounded-2xl hidden md:block">
-              <p className="text-sm font-bold text-foreground">Signature Heavyweight</p>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">100% Premium Cotton</p>
-              <div className="mt-4 flex items-center justify-between gap-4">
-                <span className="text-lg font-bold">$45.00</span>
-                <Link to="/shop">
-                  <Button size="sm" className="h-8 rounded-full text-[10px] px-4">Buy Now</Button>
-                </Link>
+            {/* Floating Glass Tag (Restyled for safety) */}
+            <div className="absolute bottom-8 right-0 md:-left-12 glass p-5 px-6 rounded-2xl hidden sm:block border border-white/10 shadow-2xl animate-reveal">
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/70">Heritage Piece</span>
+                <p className="text-xl font-bold text-foreground">Heavyweight Tee</p>
+                <div className="flex items-center gap-3 mt-4 border-t border-foreground/5 pt-3">
+                  <span className="text-lg font-bold tracking-tight">$45.00</span>
+                  <Link to="/shop">
+                    <Button size="sm" className="h-8 rounded-full px-5 text-[10px] font-bold">Buy Now</Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
