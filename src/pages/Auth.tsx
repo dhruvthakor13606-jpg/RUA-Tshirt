@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { auth, db } from "@/lib/firebase";
+import { auth, db, isMock, mockSignIn, mockSignUp } from "@/lib/firebase";
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
@@ -26,6 +26,18 @@ const Auth = () => {
     setLoading(true);
 
     try {
+      if (isMock) {
+        if (isLogin) {
+          await mockSignIn(email, password);
+          toast.success("Welcome back (Mock Mode)!");
+        } else {
+          await mockSignUp(email, password);
+          toast.success("Account created (Mock Mode)!");
+        }
+        navigate("/");
+        return;
+      }
+
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
         toast.success("Welcome back!");

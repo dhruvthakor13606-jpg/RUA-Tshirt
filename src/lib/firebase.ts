@@ -31,18 +31,49 @@ try {
 
 // Resilient exports - Return real service or a "safe mock" to prevent crashes
 export const db = (app && app.options) ? getFirestore(app) : ({
-  collection: () => ({ doc: () => ({ onSnapshot: () => () => {} }) }),
-  doc: () => ({ onSnapshot: () => () => {} })
+  collection: () => ({ 
+    doc: () => ({ 
+      set: () => Promise.resolve(),
+      onSnapshot: () => () => {} 
+    }) 
+  }),
+  doc: () => ({ 
+    set: () => Promise.resolve(),
+    setDoc: () => Promise.resolve(),
+    onSnapshot: () => () => {} 
+  })
 } as any);
 
 export const auth = (app && app.options) ? getAuth(app) : ({
-  onAuthStateChanged: (cb: any) => { cb(null); return () => {}; },
-  currentUser: null
+  onAuthStateChanged: (cb: any) => { 
+    // Simulate being logged in as guest in mock mode
+    cb({ uid: "mock-user-123", email: "guest@rua.com", displayName: "Guest Designer" }); 
+    return () => {}; 
+  },
+  currentUser: { uid: "mock-user-123", email: "guest@rua.com", displayName: "Guest Designer" }
 } as any);
 
 export const storage = (app && app.options) ? getStorage(app) : ({} as any);
 
-// Export a flag to help pages instantly skip DB calls if not configured
+// -- Mock Firebase Logic --
 export const isMock = !app;
+
+// Simulated Authentication Functions
+export const mockSignIn = async (email: string, _pass: string) => {
+  console.log("Mock Mode: Signing in with", email);
+  await new Promise(r => setTimeout(r, 800));
+  return { user: { uid: "mock-user-123", email, displayName: email.split('@')[0] } };
+};
+
+export const mockSignUp = async (email: string, _pass: string) => {
+  console.log("Mock Mode: Creating account for", email);
+  await new Promise(r => setTimeout(r, 800));
+  return { user: { uid: "mock-user-123", email, displayName: email.split('@')[0] } };
+};
+
+export const mockSignOut = async () => {
+  console.log("Mock Mode: Signing out");
+  return Promise.resolve();
+};
 
 export default app;
