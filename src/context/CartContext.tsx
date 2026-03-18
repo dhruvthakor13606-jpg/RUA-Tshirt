@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import type { Product } from "@/data/products";
-import { auth, db } from "@/lib/firebase";
+import { auth, db, isMock } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { CartItem } from "@/types/ecommerce";
@@ -32,7 +32,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Sync from Firestore on login
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || isMock) return;
 
     const cartRef = doc(db, "carts", userId);
     const unsubscribe = onSnapshot(cartRef, (docSnap) => {
@@ -47,7 +47,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Sync to Firestore on change
   const syncCart = useCallback(async (newItems: CartItem[]) => {
-    if (!userId) return;
+    if (!userId || isMock) return;
     try {
       await setDoc(doc(db, "carts", userId), { items: newItems });
     } catch (error) {
