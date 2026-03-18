@@ -18,20 +18,28 @@ if (!import.meta.env.VITE_FIREBASE_API_KEY) {
   console.warn("⚠️ Firebase API Key is missing. Check your Vercel Environment Variables!");
 }
 
-let app;
+let app: any;
 try {
-  if (import.meta.env.VITE_FIREBASE_API_KEY) {
+  if (import.meta.env.VITE_FIREBASE_API_KEY && import.meta.env.VITE_FIREBASE_API_KEY !== "undefined") {
     app = initializeApp(firebaseConfig);
   } else {
-    console.warn("⚠️ Firebase API Key missing. Skipping initialization.");
+    console.warn("⚠️ Firebase API Key is missing. The app will run in 'Mock Mode' (no database/auth). Please add VITE_FIREBASE_API_KEY to Vercel Environment Variables.");
   }
 } catch (error) {
   console.error("❌ Firebase initialization failed:", error);
 }
 
-// Safely initialize services only if app exists
-export const db = app ? getFirestore(app) : null as any;
-export const auth = app ? getAuth(app) : null as any;
-export const storage = app ? getStorage(app) : null as any;
+// Resilient exports - Return real service or a "safe mock" to prevent crashes
+export const db = (app && app.options) ? getFirestore(app) : ({
+  collection: () => ({ doc: () => ({ onSnapshot: () => () => {} }) }),
+  doc: () => ({ onSnapshot: () => () => {} })
+} as any);
+
+export const auth = (app && app.options) ? getAuth(app) : ({
+  onAuthStateChanged: (cb: any) => { cb(null); return () => {}; },
+  currentUser: null
+} as any);
+
+export const storage = (app && app.options) ? getStorage(app) : ({} as any);
 
 export default app;
