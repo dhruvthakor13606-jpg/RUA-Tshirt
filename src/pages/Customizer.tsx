@@ -96,27 +96,23 @@ const Customizer = () => {
             </div>
 
             <div className="relative aspect-[4/5] md:aspect-square bg-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-border/50 flex items-center justify-center p-8 group">
-              {/* Tee Background Color (Masked to T-shirt shape) */}
+              {/* Tee Color Glow (Centered to avoid square corners) */}
               <div 
-                className="absolute inset-0 transition-colors duration-500"
-                style={{ 
-                  backgroundColor: teeColor,
-                  maskImage: 'url(/images/blank-tee.png)',
-                  WebkitMaskImage: 'url(/images/blank-tee.png)',
-                  maskSize: 'contain',
-                  WebkitMaskSize: 'contain',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskPosition: 'center',
-                  WebkitMaskPosition: 'center',
-                }}
+                className="absolute inset-[15%] rounded-full blur-[80px] opacity-60 transition-all duration-700"
+                style={{ backgroundColor: teeColor }}
               />
               
+              {/* Additional Subtle Overlay for depth */}
+              <div 
+                className="absolute inset-x-20 inset-y-10 rounded-[3rem] blur-[120px] opacity-20 transition-all duration-500"
+                style={{ backgroundColor: teeColor }}
+              />
+
               {/* The Mockup Base (Multiply blend to show shadows on color) */}
               <img 
                 src="/images/blank-tee.png" 
                 alt="Mockup Base" 
-                className="relative h-full w-full object-contain mix-blend-multiply opacity-100 pointer-events-none"
+                className="relative h-full w-full object-contain mix-blend-multiply opacity-100 pointer-events-none drop-shadow-2xl"
               />
 
               {/* Custom Layers Container */}
