@@ -96,17 +96,27 @@ const Customizer = () => {
             </div>
 
             <div className="relative aspect-[4/5] md:aspect-square bg-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-border/50 flex items-center justify-center p-8 group">
-              {/* Tee Background Color (Simulated) */}
+              {/* Tee Background Color (Masked to T-shirt shape) */}
               <div 
                 className="absolute inset-0 transition-colors duration-500"
-                style={{ backgroundColor: teeColor }}
+                style={{ 
+                  backgroundColor: teeColor,
+                  maskImage: 'url(/images/blank-tee.png)',
+                  WebkitMaskImage: 'url(/images/blank-tee.png)',
+                  maskSize: 'contain',
+                  WebkitMaskSize: 'contain',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskPosition: 'center',
+                  WebkitMaskPosition: 'center',
+                }}
               />
               
               {/* The Mockup Base (Multiply blend to show shadows on color) */}
               <img 
                 src="/images/blank-tee.png" 
                 alt="Mockup Base" 
-                className="relative h-full w-full object-contain mix-blend-multiply opacity-90 pointer-events-none"
+                className="relative h-full w-full object-contain mix-blend-multiply opacity-100 pointer-events-none"
               />
 
               {/* Custom Layers Container */}
