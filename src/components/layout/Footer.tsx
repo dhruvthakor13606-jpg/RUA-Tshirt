@@ -6,7 +6,7 @@ const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <img src="/favicon.jpg" alt="RUA" className="h-10 w-auto rounded-md shadow-sm" />
+            <img src="/favicon.jpg" alt="RUA" className="h-10 w-10 object-contain rounded-md shadow-sm" />
             <h3 className="font-bold text-foreground tracking-tighter uppercase text-xl">RUA</h3>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">

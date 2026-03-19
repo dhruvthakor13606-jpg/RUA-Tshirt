@@ -4,7 +4,7 @@ import { ShoppingBag, Menu, X, Sun, Moon, Search, User } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useTheme } from "@/context/ThemeContext";
 import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/firebase";
+import { auth, isMock, mockSignOut } from "@/lib/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { toast } from "sonner";
 
@@ -23,9 +23,15 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      if (isMock) {
+        await mockSignOut();
+      } else {
+        await signOut(auth);
+      }
       toast.success("Logged out successfully");
+      setUser(null);
     } catch (error) {
+      console.error("Logout error:", error);
       toast.error("Logout failed");
     }
   };
@@ -44,7 +50,7 @@ const Navbar = () => {
       <nav className="container mx-auto flex items-center justify-between h-16 px-6">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <img src="/favicon.jpg" alt="RUA" className="h-8 w-auto rounded-sm" />
+          <img src="/favicon.jpg" alt="RUA" className="h-8 w-8 object-contain rounded-sm" />
           <span className="text-lg font-bold tracking-tighter uppercase px-2 py-0.5 rounded bg-foreground text-background">RUA</span>
         </Link>
 
