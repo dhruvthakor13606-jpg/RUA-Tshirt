@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
 import { useState, useEffect } from "react";
-import { auth, db } from "@/lib/firebase";
+import { auth, db, isMock } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { toast } from "sonner";
@@ -70,8 +70,14 @@ const Cart = () => {
 
       console.log("Attempting to place order with data:", orderData);
 
-      const docRef = await addDoc(collection(db, "orders"), orderData);
-      console.log("Order placed successfully with ID:", docRef.id);
+      if (isMock) {
+        console.log("Mock Mode: Simulating order placement");
+        await new Promise(resolve => setTimeout(resolve, 800));
+        console.log("Mock order placed successfully");
+      } else {
+        const docRef = await addDoc(collection(db, "orders"), orderData);
+        console.log("Order placed successfully with ID:", docRef.id);
+      }
 
       setCheckoutDone(true);
       clearCart();
